@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <style>
+
+        #join{
+            text-align: center;
+            margin:auto;
+            color:cornflowerblue;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+            font-size:150px;
+        }
+
+        .flex-container {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #user {
+            width: 150px;
+            height: 150px;
+            background-image: url(pics/userimg.png);
+            background-size: contain;
+            margin: auto;
+            margin-top: 10px;
+        }
+        .card-title{
+            color:royalblue;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script>
+         /*function doSetInterval()
+        {
+            const myCarouselElement = document.querySelector('#carouselExampleAutoplaying');
+
+        const carousel = new bootstrap.Carousel(myCarouselElement, {
+        interval: 100,
+       
+        })
+        }*/
+
+
+        $(document).ready(function () {
+            $("#txtEmail").blur(function () {
+        var email = $(this).val();
+        var obj = {
+          type: "get",
+          url: "/check-email",
+          data: {
+            emailid: email
+          }
+        }
+
+        $.ajax(obj).done(function (respKuch) {
+          //alert(respKuch);
+          $("#res").html(respKuch);
+        }).fail(function (errKuch) {
+          //alert(errKuch)
+          $("#res").html(respKuch);
+        })
+
+      });
+            $("#btnsign").click(function () {
+                var email = $("#txtEmail").val();
+                var pwd = $("#txtPwd").val();
+                var emailValid= /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(email);
+                var pwdValid= /(?=^.{8,}$)(?=.*\d)(?=.*[!@#$%^&*]+)(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/.test(pwd);
+                if(emailValid && pwdValid){
+                var type = $("#txtType").val();
+                var obj = {
+                    type: "get",
+                    url: "/check-signin",
+                    data: {
+                        emailid: email,
+                        password: pwd,
+                        types: type,
+                    }
+                }
+                $.ajax(obj).done(function (resp1) {
+                    $("#show").html(resp1);
+                }).fail(function (err1) {
+                    $("#show").html(err1);
+                })
+            }else{
+                alert("Please enter a valid email and password");
+            }
+            });
+        });
+        $(document).ready(function () {
+            $("#btnLogin").click(function () {
+                var email = $("#txtEmaillog").val();
+                var pwd = $("#txtPwdlog").val();
+                var obj = {
+                    type: "get",
+                    url: "/login",
+                    data: {
+                        emailid: email,
+                        password: pwd,
+                    }
+                }
+                $.ajax(obj).done(function (resp) {
+                    localStorage.setItem("active",email);
+                    if(resp=="Donor")
+                    location.href="dash-donor.html";
+                    else
+                    if(resp=="Needy")
+                    location.href="dash-needy.html";
+                    else
+                    alert(resp);
+                }).fail(function (err) {
+                    alert(err);
+                })
+            });
+        });
+    </script>
+</head>
+
+<body>
+    <!--<div id="background"><img src="medbkgrd.avif"></div>-->
+    <!--<div class="container">
+    <div class="row">
+    <div class="col-sm-4" id="join">Join Us</div>
+    <div class="col-sm-8" ><img src="pics/help.jpg" style="float:right;width:550px;height:550px;margin-top:10%;margin-bottom: 10%;"></div>
+    </div></div>-->
+   
+
+
+    <div id="navbar" class="fixed-top">
+        <nav class="navbar bg-body-tertiary">
+            <div class="container-fluid">
+            
+                <a class="navbar-brand" style="color:cornflowerblue">
+                    <img src="pics/Screenshot 2023-07-20 194537.png" alt="Bootstrap" width="60" height="50">
+                    <div style="float:right;"><h2 style="color:cornflowerblue;">HelpRX</h2></div>
+                </a>
+                
+                
+                <form>
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal1" size="40">
+                        Sign-Up
+                    </button>
+                    <button type="button" class="btn btn-primary btn-lg" data-bs-toggle="modal"
+                        data-bs-target="#exampleModal2" size="40">
+                        Login
+                    </button>
+                </form>
+            </div>
+        </nav>
+    </div>
+
+    <div id="carouselExampleAutoplaying" class="carousel slide" data-bs-ride="carousel" style="margin-top: 5%;">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <img src="pics/carousel2.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="pics/carousel4paint.png" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="pics/carousel6.png" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="pics/help.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="pics/carousel1.jpg" class="d-block w-100" alt="...">
+          </div>
+          <div class="carousel-item">
+            <img src="pics/carousel3.jpg" class="d-block w-100" alt="...">
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleAutoplaying" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+      <div class="bg-dark-subtle text-emphasis-dark" style="font-size:35px;"><center>Our Services</center></div>
+
+      <div class="row row-cols-1 row-cols-md-4 g-4">
+        <div class="col">
+          <div class="card text-bg-light ">
+            <img src="pics/donation.jpg" class="card-img-top" style="width: 300px; height: 300px; margin:auto;">
+            <div class="card-body">
+              <h5 class="card-title"><center>DONATION</center></h5>
+              <p class="card-text"><center>Any number of willing people can give up the medicines not anymore in their use to the people who are in need free of cost. The people willing to take part in the social cause can do so by registering on our site.</center></p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class=" card text-bg-light ">
+            <img src="pics/needy.jpg" class="card-img-top" style="width: 300px; height: 300px; margin:auto;">
+            <div class="card-body">
+              <h5 class="card-title"><center>NEEDY</center></h5>
+              <p class="card-text"><center>The people who are in need of medicines but are not able to buy them due to any reason can get them here for free of cost,just by contacting the people willing to donate by registering onto our website.</center></p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class=" card text-bg-light ">
+            <img src="pics/tandc.gif" class="card-img-top" style="width: 300px; height: 300px; margin:auto;">
+            <div class="card-body">
+              <h5 class="card-title"><center>TERMS & CONDITIONS</center></h5>
+              <p class="card-text"><center>The donors and needy would be solely responsible for all the transactions held between them. We won't be held responsible for any sort of mishaps during the dealing.. <a href="/tandc.html">Read more</a></center></p>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div class=" card text-bg-light ">
+            <img src="pics/helpandsupport.jpg" class="card-img-top" style="width: 300px; height: 300px; margin:auto;">
+            <div class="card-body">
+              <h5 class="card-title"><center>HELP & SUPPORT</center></h5>
+              <p class="card-text"><center>This is a non-profit business made to provide medical support to the people in need free of cost. It brings the donors and needy in contact with each other thus helping them to conduct the deal fruitfully.</center></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-dark-subtle text-emphasis-dark" style="font-size:35px;"><center>Developed By</center></div>
+
+      <div class="card-group">
+      <div class="card  text-bg-light">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="pics/myself2.jpg" class="img-fluid rounded-start" style="border-radius:50%">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h4 class="card-title">Developed By:</h4>
+              <p class="card-text"><i>Name: Pari Gupta</i></p>
+              <p class="card-text"><i>Email id: guptapari1404@gmail.com</i></p>
+              <p class="card-text"><i>College: Thapar Institute of Engineering and Technology</i></p>
+              <p class="card-text"><i>Branch: Electronics (Instrumentation & Control) Engineering</i></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card  text-bg-light">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <img src="pics/sir.enc" class="img-fluid rounded-start" style="border-radius:50%">
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h4 class="card-title">Under the Guidance of:</h4>
+              <p class="card-text"><i>Name: Mr.Rajesh Bansal (Author of Real Java)</i></p>
+              <p class="card-text"><i>Institute: Bangalore Computer Education</i></p>
+              <p class="card-text"><i>Email id: bcebti@gmail.com</i></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+
+
+      <div class="bg-dark-subtle text-emphasis-dark" style="font-size:35px;"><center>Reach Us</center></div>
+      <center><div class="text-bg-light">
+        <iframe width="800" height="300" frameborder="0" style="margin-top:10px;" src="https://www.bing.com/maps/embed?h=300&w=800&cp=30.212344987156015~74.95351361672272&lvl=18&typ=d&sty=r&src=SHELL&FORM=MBEDV8" scrolling="no">
+        </iframe>
+        <div style="white-space: nowrap; text-align: center; width: 800px; padding: 6px 0;">
+           <a id="largeMapLink" target="_blank" href="https://www.bing.com/maps?cp=30.212344987156015~74.95351361672272&amp;sty=r&amp;lvl=18&amp;FORM=MBEDLD">View Larger Map</a> &nbsp; | &nbsp;
+           <a id="dirMapLink" target="_blank" href="https://www.bing.com/maps/directions?cp=30.212344987156015~74.95351361672272&amp;sty=r&amp;lvl=18&amp;rtp=~pos.30.212344987156015_74.95351361672272____&amp;FORM=MBEDLD">Get Directions</a>
+       </div>
+   </div></center>
+   <br><br>
+
+    
+   
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Sign-Up</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-3 mb-2 bg-dark-subtle text-emphasis-dark">
+                    <div id="user"></div>
+                    <form>
+                        <div class="mb-3">
+                            <label for="txtEmail" class="form-label">Email address</label>
+                            <span id="res">*</span>
+                            <div class="flex-container">
+                                <div><i class="fa-solid fa-user"></i></div>
+                                <div><input type="email" class="form-control" id="txtEmail" aria-describedby="emailHelp"
+                                        size="50"></div>
+                                <div> &nbsp;&nbsp;&nbsp;</div>
+                                <p><span id="errEmail"></span></p>
+                            </div>
+                            <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtPwd" class="form-label">Password</label>
+                            <div class="flex-container">
+                                <div><i class="fa-solid fa-lock"></i></div>
+                                <div><input type="password" class="form-control" id="txtPwd" size="50"></div>
+                                <div> &nbsp;&nbsp;&nbsp;</div>
+                                <p><span id="errPwd"></span></p>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="txtType">Type</label>
+                            <select id="txtType" name="txtType">
+                                <option>Select</option>
+                                <option>Donor</option>
+                                <option>Needy</option>
+                            </select>
+
+
+                        </div>
+                        <div class="modal-footer">
+
+                            <button type="button" class="btn btn-primary" id="btnsign">Sign Up</button>
+                            <div id="show"></div>
+                        </div>
+
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+                <div><h1>LOGIN</h1></div>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-3 mb-2 bg-dark-subtle text-emphasis-dark">
+                <form>
+                    <div class="mb-3">
+                      <label for="txtEmaillog" class="form-label">Email address</label>
+                      <input type="email" class="form-control" id="txtEmaillog" aria-describedby="emailHelp">
+                      
+                    </div>
+                    <div class="mb-3">
+                      <label for="txtPwdlog" class="form-label">Password</label>
+                      <input type="password" class="form-control" id="txtPwdlog">
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" id="btnLogin" class="btn btn-primary">Login</button>
+                    </div>
+                  </form>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    
+    
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>

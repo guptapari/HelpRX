@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bootstrap demo</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  <style>
+   
+
+    form {
+      
+      padding: 10px;
+    
+    }
+
+    .flex-container {
+      display: flex;
+      justify-content: space-evenly;
+      float: left
+    }
+
+    label {
+      font-weight: bold;
+    }
+  </style>
+  <script>
+    function doPrev(refFile, prevImg) {
+      const [file] = refFile.files
+      if (file) {
+        prevImg.src = URL.createObjectURL(file)
+      }
+    }
+
+    $(document).ready(function () {
+      $("#txtEmail").blur(function () {
+        var emailKu = $(this).val();
+        var obj = {
+          type: "get",
+          url: "/chk-email-donor",
+          data: {
+            kuchEmail: emailKu
+          }
+        }
+
+        $.ajax(obj).done(function (respKuch) {
+          //alert(respKuch);
+          $("#res").html(respKuch);
+        }).fail(function (errKuch) {
+          //alert(errKuch)
+          $("#res").html(respKuch);
+        })
+
+      });
+
+
+      $("#btnSearch").click(function () {
+        var emailKu = $("#txtEmail").val();
+        var obj = {
+          type: "get",
+          url: "/get-record-donor",
+          data: {
+            kuchEmail: emailKu
+          }
+        }
+
+        $.ajax(obj).done(function (respJSON) {
+          //alert(JSON.stringify(respJSON));
+          $("#txtName").val(respJSON[0].name)
+          $("#txtContact").val(respJSON[0].contact)
+          $("#txtAddress").val(respJSON[0].address)
+          $("#txtCity").val(respJSON[0].city)
+          $("#txtDate").val(respJSON[0].dob)
+          $("#txtGender").val(respJSON[0].gender)
+          $("#txtFrom").val(respJSON[0].from)
+          $("#txtTo").val(respJSON[0].to)
+          $("#txtID").val(respJSON[0].id)
+          $("#imgPrev").prop("src", "pics/" + respJSON[0].idpicname);
+          $("#hdn").val(respJSON[0].idpicname);
+          var a_hours=respJSON[0].ahours.split("-");
+          var from=a_hours[0];
+          var to=a_hours[1];
+          $("#txtFrom").val(from);
+          $("#txtTo").val(to);
+        }).fail(function (errKuch) {
+          alert(errKuch);
+        })
+      });
+
+      function setActiveUser()
+          {
+            var au=localStorage.getItem("active");
+            $("#txtEmail").val(au).prop("readonly",true);
+            if(localStorage.getItem("active")==undefined)
+            {
+              location.href="index.html";
+            }
+          }
+          setActiveUser();
+          $("#btnlogout").click(function(){
+            localStorage.removeItem("active");
+            location.href="index.html";
+          })
+
+      /*$("#btnUpdate").click(function(){
+        var emailKu=$("#txtEmail").val();
+        var nameKu=$("#txtName").val();
+        var contactKu=$("#txtContact").val();
+        var addressKu=$("#txtAddress").val();
+        var cityKu=$("#txtCity").val();
+        var dateKu=$("#txtDate").val();
+        var genderKu=$("#txtGender").val();
+        var idKu=$("#txtID").val();
+        var imgKu=$("#imgPrev").val();
+        var picname=$("#ppic").val();
+        var obj={
+          type:"get",
+          url:"/update-json-record",
+          data:{
+            kuchEmail:emailKu,
+            name:nameKu,
+            contact:contactKu,
+            address:addressKu,
+            city:cityKu,
+            date:dateKu,
+            gender:genderKu,
+            id:idKu,
+            img:imgKu,
+            pic:picname
+          }
+        }
+
+        /*$.ajax(obj).done(function(resp1){
+                $("#showUpdate").html(resp1);
+            }).fail(function(err1){
+                $("#showUpdate").html(err1);
+            })
+
+        $.ajax(obj).done(function(respJSON){
+          alert(JSON.stringify(respJSON));
+          $("#txtName").val(respJSON[0].name)
+          $("#txtContact").val(respJSON[0].contact)
+          $("#txtAddress").val(respJSON[0].address)
+          $("#txtCity").val(respJSON[0].city)
+          $("#txtDate").val(respJSON[0].dob)
+          $("#txtGender").val(respJSON[0].gender)
+          $("#txtID").val(respJSON[0].id)
+          $("#imgPrev").prop("src","uploads/"+respJSON[0].idpicname);
+          //$("#showUpdate").html(respJSON);
+        }).fail(function(errKuch){
+          //$("#showUpdate").html(errKuch);
+          alert(errKuch);
+        })
+      });
+
+      $("#btnSubmit").click(function () {
+        var emailKu=$("#txtEmail").val();
+        var nameKu=$("#txtName").val();
+        var contactKu=$("#txtContact").val();
+        var addressKu=$("#txtAddress").val();
+        var cityKu=$("#txtCity").val();
+        var dateKu=$("#txtDate").val();
+        var genderKu=$("#txtGender").val();
+        var idKu=$("#txtID").val();
+        var imgKu=$("#imgPrev").val();
+        var picname=$("#ppic").val();
+            var obj = {
+                type: "get",
+                url: "/profile-submit",
+                data: {
+                  kuchEmail:emailKu,
+            name:nameKu,
+            contact:contactKu,
+            address:addressKu,
+            city:cityKu,
+            date:dateKu,
+            gender:genderKu,
+            id:idKu,
+            img:imgKu,
+            pic:picname
+                }
+            }
+            $.ajax(obj).done(function(resp1){
+                $("#showSubmit").html(resp1);
+            }).fail(function(err1){
+                $("#showSubmit").html(err1);
+            })
+    });*/
+    });
+  </script>
+
+</head>
+
+<body>
+  <div id="navbar" class="fixed-top col-md-12">
+        
+    <nav class="navbar bg-body-tertiary">
+        
+        <div class="container-fluid">
+            <a class="navbar-brand" style="color:cornflowerblue">
+              <img src="pics/Screenshot 2023-07-20 194537.png" alt="Bootstrap" width="60" height="50">
+              <div style="float:right"><h2 style="color:cornflowerblue;">HelpRX</h2></div>
+            </a>
+            
+                <button type="button" id="btnlogout" class="btn btn-primary btn-lg">Logout</button>
+            
+        </div>
+        
+    </nav>
+</div>
+  <div class="container" style="margin-top: 7%;">
+    <div class="col-md-12">
+      <form method="post" enctype="multipart/form-data">
+        <input type="hidden" id="hdn" name="hdn">
+        <p>
+          <center>
+            <h3>Donor Profile Form</h3>
+          </center>
+        </p><br><br>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="txtEmail" class="form-label">E-Mail</label>
+            <span id="res">*</span>
+            <input type="text" class="form-control" id="txtEmail" name="txtEmail" aria-label="First name">
+          </div>
+          <div class="col-md-6" role="search">
+            <label></label>
+            <br>
+            <div class="flex-container">
+              <div><button class="btn btn-outline-dark" id="btnSearch" type="button">Search</button></div>
+              <!--<div><button class="btn btn-outline-dark" id="btnSearch" type="button">Search</button></div>-->
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label for="formGroupExampleInput" class="form-label">Name</label>
+              <input type="text" class="form-control" id="txtName" name="txtName" aria-label="First name">
+            </div>
+            <div class="col-md-6">
+              <label for="formGroupExampleInput2" class="form-label">Contact</label>
+              <input type="text" class="form-control" id="txtContact" name="txtContact" aria-label="Last name">
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label">Address</label>
+              <input type="text" class="form-control" id="txtAddress" name="txtAddress" aria-label="Address">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">City</label>
+              <input list="city" class="form-control" id="txtCity" name="txtCity">
+              <datalist id="city">
+                <option>Bathinda</option>
+                <option>Sangrur</option>
+                <option>Ludhiana</option>
+                <option>Amritsar</option>
+                <option>Jalandhar</option>
+                <option>Patiala</option>
+                <option>Pathankot</option>
+              </datalist>
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form label">Date of Birth</label><br>
+              <input type="date" class="form-control" id="txtDate" name="txtDate" aria-label="Date">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Gender</label>
+              <select id="txtGender" name="txtGender" class="form-control">
+                <option>Select</option>
+                <option>Female</option>
+                <option>Male</option>
+                <option>Transgender</option>
+                <option>Prefer not to say</option>
+              </select>
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-3">
+              
+              <label class="form-label">Availability Hours</label><br>
+
+            </div>
+            <div class="col-md-3"> <label class="form-label">From</label>
+              <input type="time" id="txtFrom" name="txtFrom" class="form-control">
+                
+            </div>
+            <div class="col-md-3">
+              <label class="form-label">To</label>
+              <input type="time" id="txtTo" name="txtTo" class="form-control">
+               
+            </div>
+
+          </div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">ID Proof</label>
+              <select name="txtID" id="txtID" class="form-control">
+                <option>Select</option>
+                <option>Adhaar Card</option>
+                <option>Driving License</option>
+                <option>School/College ID</option>
+                <option>Passport</option>
+                <option>Any other govt. issued id</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <center><label class="form-label">Upload ID Proof</label>
+                <input type="file" onchange="doPrev(this,imgPrev)" name="ppic" id="ppic" accept="image/*">
+              </center>
+            </div>
+            <div class="col-md-4">
+              <!--<label class="form-label">Preview</label>-->
+              <img src="" id="imgPrev" alt="" width="100" height="100">
+            </div>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-6">
+              <center><button type="submit" id="btnSubmit" class="btn btn-outline-dark"
+                  formaction="/donors-registeration-process">Submit</button></center>
+              <div id="showSubmit"></div>
+            </div>
+            <div class="col-md-6">
+              <center><button type="submit" id="btnUpdate" class="btn btn-outline-dark"
+                  formaction="/donors-update-process">Update</button></center>
+              <div id="showUpdate"></div>
+            </div>
+          </div>
+          <br><br><br><br><br><br>
+      </form>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
+    crossorigin="anonymous"></script>
+</body>
+
+</html>

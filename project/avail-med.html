@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <style>
+     
+        
+        label{
+            font-weight:bold;
+        }
+        
+    </style>
+    <script>
+        $(document).ready(function(){
+            $("#btnAvail").click(function(){
+                var email=$("#txtEmail").val();
+                var med=$("#txtMed").val();
+                var exp=$("#txtExp").val();
+                var pack=$("#txtPack").val();
+                var qty=$("#txtQty").val();
+                var obj={
+                    type:"get",
+                    url:"/med-avail",
+                    data:{
+                        emailid:email,
+                        medicine:med,
+                        expiry:exp,
+                        packing:pack,
+                        quantity:qty,
+                    }
+                }
+                $.ajax(obj).done(function(resp){
+                    $("#show").html(resp);
+                }).fail(function(err){
+                    $("#show").html(err);
+                })
+            });
+            function setActiveUser()
+          {
+            if(localStorage.getItem("active")==undefined)
+            {
+              location.href="index.html";
+            }
+            var au=localStorage.getItem("active");
+            $("#txtEmail").val(au).prop("readonly",true);
+          }
+          setActiveUser();
+          $("#btnlogout").click(function(){
+            localStorage.removeItem("active");
+            location.href="index.html";
+          })
+        });
+    </script>
+  </head>
+  <body >
+    <div id="navbar" class="fixed-top col-md-12">
+        
+        <nav class="navbar bg-body-tertiary">
+            
+            <div class="container-fluid">
+                <a class="navbar-brand" style="color:cornflowerblue">
+                  <img src="pics/Screenshot 2023-07-20 194537.png" alt="Bootstrap" width="60" height="50">
+                  <div style="float:right"><h2 style="color:cornflowerblue;">HelpRX</h2></div>
+                </a>
+                <form>
+                    <button type="button" id="btnlogout" class="btn btn-primary btn-lg">Logout</button>
+                </form>
+            </div>
+            
+        </nav>
+    </div>
+    <section class="h-100 h-custom" style="margin-top: 5%;">
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-8 col-xl-6 ">
+              <div class="card rounded-3 ">
+                <img src="pics/mediciness.jpg"
+                  class="w-100" style="border-top-left-radius: .3rem; border-top-right-radius: .3rem;"
+                  alt="Sample photo">
+                <div class="card-body p-4 p-md-5">
+                  <h3 class="mb-4 pb-2 pb-md-0 mb-md-5 px-md-2">Avail Medicines</h3>
+      
+                  <form class="px-md-2" method="post">
+      
+                    <div class="form-outline mb-4">
+                        <label class="form-label" for="txtEmail">Email Id</label>
+                      <input type="text" id="txtEmail" class="form-control" />
+                      
+                    </div>
+      
+                    <div class="row">
+                      <div class="col-md-6 mb-4">
+      
+                        <div class="form-outline datepicker">
+                            <label for="txtMed" class="form-label">Medicine Name</label>
+                          <input type="text" class="form-control" id="txtMed" />
+                          
+                        </div>
+      
+                      </div>
+                      <div class="col-md-6 mb-4">
+      
+                        <div class="form-outline datepicker">
+                            <label for="txtExp" class="form-label">Expiry date</label>
+                            <input type="date" class="form-control" id="txtExp" />
+                            
+                        </div>
+      
+                      </div>
+                    </div>
+      
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline datepicker">
+                            <label for="txtPack" class="form-label">Packing</label><br>
+                            <select id="txtPack">
+                                <option>Select</option>
+                                <option>Bottle</option>
+                                <option>Strips</option>
+                                <option>Sachet</option>
+                                <option>Pouch</option>
+                                <option>Inhaler</option>
+                                <option>Vial</option>
+                                <option>Dispenser Bottle</option>
+                            </select>
+                            
+                          </div>
+        
+                        </div>
+                        <div class="col-md-6 mb-4">
+        
+                          <div class="form-outline datepicker">
+                            <label for="txtQty" class="form-label">Quantity</label>
+                              <input type="number" class="form-control" id="txtQty" />
+                              
+                          </div>
+        
+                        </div>
+                      </div>
+                    
+      
+                    <center><button type="button" class="btn btn-outline-dark btn-lg mb-1" id="btnAvail">Avail Medicine</button>
+                    <div id="show"></div>
+                    </center>
+      
+                  </form>
+      
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  </body>
+</html>

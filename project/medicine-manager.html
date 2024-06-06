@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <title>Document</title>
+    <script src="script/angular.min.js"></script>
+    <style>
+       
+    </style>
+    <script>
+        var module=angular.module("myModule",[]);
+        module.controller("myController",function($scope,$http){
+            $scope.jsonArray;
+            $scope.email="";
+            $scope.fetchRecord=function()
+            {
+                var url="/get-angular-availmed?emailid="+$scope.email;
+                $http.get(url).then(done,fail);
+                function done(resp)
+                {
+                    //alert(JSON.stringify(resp.data));
+                    $scope.jsonArray=resp.data;
+                }
+                function fail(resp)
+                {
+                    alert(resp.data);
+                }
+            }
+            $scope.doDelete=function(srno)
+            {
+                if(confirm("Are you sure?")==false)
+                return;
+                var url="/do-angular-delete?srno="+srno;
+                $http.get(url).then(done,fail);
+                function done(resp)
+                {
+                    //alert(resp.data);
+                    $scope.fetchRecord();
+                }
+                function fail(resp)
+                {
+                    alert(resp.data);
+                }
+            }
+            function setActiveUser()
+          {
+            var au=localStorage.getItem("active");
+            //$("email").val(au).prop("readonly",true);
+            $scope.email=au;
+          }
+          setActiveUser();
+        })
+    </script>
+</head>
+<body ng-app="myModule" ng-controller="myController">
+    <div id="navbar" class="fixed-top col-md-12">
+        
+        <nav class="navbar bg-body-tertiary">
+            
+            <div class="container-fluid">
+                <a class="navbar-brand" style="color:cornflowerblue">
+                    <img src="pics/Screenshot 2023-07-20 194537.png" alt="Bootstrap" width="60" height="50">
+                    <div style="float:right"><h2 style="color:cornflowerblue;">HelpRX</h2></div>
+                </a>
+                <center><h1 style="color:cornflowerblue;">Medicine Manager</h1></center>
+                
+                    <!--<button type="button" class="btn btn-primary btn-lg">Logout</button>-->
+                
+            </div>
+            
+        </nav>
+    </div>
+
+    <div class="row" style="margin-top:7%">
+        <div class="col-md-4" style="text-align: right;font-size: larger;"><label for="txtEmail" class="form-label"><b>E-Mail</b></label></div>
+        <div class="col-md-4"><input type="text" class="form-control" ng-model="email" readonly> </div>
+        <div class="col-md-4"><input type="button" ng-click="fetchRecord();" class="btn btn-primary btn-md" value="Get Records"></div>
+    </div>
+    <br><br>
+    <div class="container">
+        <table class="table table-striped">
+            <tr>
+                <th style="text-align: center; vertical-align: middle;">Sr.No</th> <th style="text-align: center; vertical-align: middle;">Medicine</th> <th style="text-align: center; vertical-align: middle;">Expiry-date</th> <th style="text-align: center; vertical-align: middle;">Packing</th> <th style="text-align: center; vertical-align: middle;">Quantity</th> <th style="text-align: center; vertical-align: middle;">Operations</th>
+                <tr ng-repeat="obj in jsonArray">
+                    <td align="center">{{$index+1}}</td>
+                    <td align="center">{{obj.med}}</td>
+                    <td align="center">{{obj.expdate}}</td>
+                    <td align="center">{{obj.packing}}</td>
+                    <td align="center">{{obj.qty}}</td>
+                    <td align="center">
+                        <input type="button" value="UnAvail" ng-click="doDelete(obj.srno);">
+                    </td>
+                </tr>
+            </tr>
+        </table>
+        </div>
+    
+</body>
+</html>
